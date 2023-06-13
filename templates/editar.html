@@ -1,0 +1,19 @@
+<form action="/actualizarCliente/{{cliente.0}}" method="POST">
+    <h1>Formulario de edicion</h1>
+    <label type="text" name="nombre" placeholder="Nombre" value="{{cliente.1}}"><br> <!-- muestra los datos ya registrados -->
+    <select name="direccion" id="">
+        {% for d in direccion %}
+        {%if d[0] == cliente.2 %}
+        <option value="{{p.0}}">{{p.1}} {{p.0}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
+        y luego imprimo primero el nombre y luego el numero-->
+       {% endif %}
+        {% endfor %}
+</form>
+
+{% with messages = get_flashed_messages()%}
+{%if messages%}
+{%for mensaje in messages%}
+<p>{{mensaje}}</p>
+{%endfor%}
+{%endif%}
+{%endwith%}

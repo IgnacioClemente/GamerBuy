@@ -1,0 +1,26 @@
+{% extends 'encabezado.html' %}
+
+{% block body  %}
+
+<form action="/loginCliente" method="POST">
+    <h1>Formulario</h1>
+    <input type="number" name="dni" placeholder="DNI"><br>
+    <input type="text"  name="nombre" placeholder="Nombre"><br>
+        {% for c in cliente %}
+        <td>
+            <a href="/editarCliente/{{c.0}}"style="text-decoration:none" >Editar</a>  <!-- la paso la clave primaria -->
+            <a href="/eliminaCliente/{{c.0}}"style="text-decoration:none">Eliminar</a> <!-- la paso la clave primaria -->
+        </td>
+        {% endfor %}
+    </select><br>
+    <button type="submit">Ingresar</button>
+</form>
+
+{% with messages = get_flashed_messages()%}
+{%if messages%}
+{%for mensaje in messages%}
+<p>{{mensaje}}</p>
+{%endfor%}
+{%endif%}
+{%endwith%}
+{% endblock  %}

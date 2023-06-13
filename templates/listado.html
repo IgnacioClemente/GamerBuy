@@ -1,0 +1,36 @@
+<table>
+    <thead>
+        <tr>
+            <td>Numero</td>
+            <td>Fecha</td>
+            <td>Hora</td>
+            <td>Ciudad</td>
+            <td>Personal</td>
+            <td>Patente</td>
+            <td>Acciones</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for v in vuelos %} <!-- doble llave para que imprima una sola para que se ejecute -->
+        <tr>
+            <td>{{v.0}}</td>
+            <td>{{v.1}}</td>
+            <td>{{v.2}}</td>
+            <td>{{v.3}}</td>
+            <td>{{v.4}}</td>
+            <td>{{v.5}}</td>
+            <td>
+                <a href="/editarVuelos/{{v.0}}"style="text-decoration:none" >Editar</a>  <!-- la paso la clave primaria -->
+                <a href="/eliminarVuelo/{{v.0}}"style="text-decoration:none">Eliminar</a> <!-- la paso la clave primaria -->
+            </td>
+        </tr>
+{% endfor %}
+{% with messages = get_flashed_messages()%}
+{%if messages%}
+{%for mensaje in messages%}
+<p>{{mensaje}}</p>
+{%endfor%}
+{%endif%}
+{%endwith%}
+    </tbody>
+</table>

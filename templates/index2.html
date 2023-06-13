@@ -1,0 +1,29 @@
+<table>
+    <thead>
+        <tr>
+            <td>Nombre</td>
+            <td>Precio</td>
+            <td>Stock</td>
+            <td>Imagen</td>
+            <td>Marca</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in productos %} <!-- doble llave para que imprima una sola para que se ejecute -->
+        <tr>
+            <td>{{p.0}}</td>
+            <td>{{p.1}}</td>
+            <td>{{p.2}}</td>
+            <td>{{p.3}}</td>
+            <td>{{p.4}}</td>
+        </tr>
+{% endfor %} 
+    </tbody>
+</table>
+{% with messages = get_flashed_messages()%}
+{%if messages%}
+{%for mensaje in messages%}
+<p>{{mensaje}}</p>
+{%endfor%}
+{%endif%}
+{%endwith%}
