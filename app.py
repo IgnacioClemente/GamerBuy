@@ -56,6 +56,14 @@ def loginCliente():
         respuesta = cursor.fetchall()
         return render_template('login.html', cliente = respuesta)
     
+@app.route('/miUsuario',methods = ['GET'])
+def miUsuario():
+    if request.method == 'GET':
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT * FROM CLIENTE')
+        respuesta = cursor.fetchall()
+        return render_template('miUsuario.html', cliente = respuesta)
+    
 @app.route('/editarCliente/<id>')  #el id es lo que le pase entre llaves en el html
 def obtenerCliente(id):
     cursor = mysql.connection.cursor()
@@ -66,34 +74,28 @@ def obtenerCliente(id):
     res = cur.fetchall()
     return render_template('editar.html',cliente = respuesta[0],direccion = res)
 
-@app.route('/actualizarCliente/<nro>',methods = ['POST'])#pasarle la variable como esta escrita en la base de datos
-def actualizar(nro):
+@app.route('/actualizarCliente/<dni>',methods = ['POST'])#pasarle la variable como esta escrita en la base de datos
+def actualizar(dni):
     if request.method == 'POST':
-        fecha = request.form['fecha']
-        hora = request.form['hora']
-        ciudad = request.form['ciudad']
-        personal = request.form['personal']
-        patente = request.form['patente']
+        nombre = request.form['nombre']
+        direccion = request.form['direccion']
         cursor = mysql.connection.cursor()
-        cursor.execute("""UPDATE VUELOS SET
-        fecha = %s,
-        hora = %s,
-        ciudad = %s,
-        personal = %s,
-        patente = %s
-        WHERE nro =%s""",(fecha,hora,ciudad,personal,patente,nro)) #traigo los valores que tengo en la base de datos y se los paso en el update
+        cursor.execute("""UPDATE CLIENTE SET
+        nombre = %s,
+        direccion = %s,
+        WHERE dni =%s""",(nombre,direccion,dni)) #traigo los valores que tengo en la base de datos y se los paso en el update
         mysql.connection.commit()
-        print(nro,ciudad,patente)
+        print(dni,nombre,direccion)
         flash('Registro Actualizado')
-        return redirect(url_for('index'))
+        return redirect(url_for('index2'))
     
-@app.route('/eliminaCliente/<string:nro>')  #el id es lo que le pase entre llaves en el html lo convierto en string
-def eliminar(nro):
+@app.route('/eliminaCliente/<string:dni>')  #el id es lo que le pase entre llaves en el html lo convierto en string
+def eliminar(dni):
     cursor = mysql.connection.cursor()
-    cursor.execute('DELETE FROM VUELOS WHERE nro = {0}'.format(nro)) #el numero que tengo en id lo igualo a nro
+    cursor.execute('DELETE FROM CLIENTE WHERE dni = {0}'.format(dni)) #el numero que tengo en id lo igualo a nro
     mysql.connection.commit()#lo elimino
     flash('Registro Eliminado')
-    return redirect(url_for('index'))
+    return redirect(url_for('index2'))
 """
 @app.route('/registrarProducto',methods = ['POST'])
 def registrarProducto():

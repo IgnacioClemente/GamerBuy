@@ -4,7 +4,7 @@
     <select name="direccion" id="">
         {% for d in direccion %}
         {%if d[0] == cliente.2 %}
-        <option value="{{p.0}}">{{p.1}} {{p.0}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
+        <option value="{{d.0}}">{{d.1}} {{d.0}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
         y luego imprimo primero el nombre y luego el numero-->
        {% endif %}
         {% endfor %}
