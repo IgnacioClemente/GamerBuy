@@ -9,7 +9,7 @@
         <select name="direccion" id="">
             <option value="">Seleccione Dirección</option>
             {% for d in direccion %}
-            <option value="{{d.1}}">{{d.2}} {{d.3}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
+            <option value="{{d.0}}">{{d.2}} {{d.3}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
             y luego imprimo primero el nombre y luego el numero-->
             {% endfor %}
         </select><br>

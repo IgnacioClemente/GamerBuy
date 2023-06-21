@@ -42,33 +42,35 @@ def registrarCliente():
         nombre = request.form['nombre']
         direccion = request.form['direccion']
         cursor = mysql.connection.cursor()
-        cursor.execute("INSERT INTO CLIENTE (dni,nombre,direccion)VALUES(%s, %s, %s)",
+        cursor.execute("INSERT INTO CLIENTE (dni,nombre,id_direccion)VALUES(%s, %s, %s)",
         (dni,nombre,direccion)) #el porcentaje s significa que vas a poner los valores que te paso a continuacion
         mysql.connection.commit()
         flash('Registro Agregado')
         return render_template('index2.html')
     
-@app.route('/loginCliente',methods = ['GET','POST'])
+@app.route('/loginCliente',methods = ['GET', 'POST'])
 def loginCliente():
-    if request.method == 'GET':
-        cursor = mysql.connection.cursor()
-        cursor.execute('SELECT * FROM CLIENTE')
-        respuesta = cursor.fetchall()
-        return render_template('login.html', cliente = respuesta)
+    #if request.method == 'GET':
+     #   cursor = mysql.connection.cursor()
+       # cursor.execute('SELECT * FROM CLIENTE')
+        #respuesta = cursor.fetchall()
+    if request.method == 'POST':
+        flash('Bienvenido')
+        return render_template('index2.html')
     
-@app.route('/miUsuario',methods = ['GET'])
-def miUsuario():
+@app.route('/miUsuario/<dni>', methods = ['GET'])
+def miUsuario(dni):
     if request.method == 'GET':
         cursor = mysql.connection.cursor()
-        cursor.execute('SELECT * FROM CLIENTE')
+        cursor.execute('SELECT * FROM CLIENTE where dni = %s' % (dni))
         respuesta = cursor.fetchall()
         return render_template('miUsuario.html', cliente = respuesta)
     
-@app.route('/editarCliente/<id>')  #el id es lo que le pase entre llaves en el html
-def obtenerCliente(id):
+@app.route('/editarCliente/<dni>')  #el id es lo que le pase entre llaves en el html
+def obtenerCliente(dni):
     cursor = mysql.connection.cursor()
     cur= mysql.connection.cursor()
-    cursor.execute('SELECT * FROM CLIENTE WHERE dni = %s' % (id)) #el numero que tengo en id lo igualo a nro
+    cursor.execute('SELECT * FROM CLIENTE WHERE dni = %s' % (dni)) #el numero que tengo en id lo igualo a nro
     cur.execute('SELECT * FROM DIRECCION')
     respuesta = cursor.fetchall()
     res = cur.fetchall()
