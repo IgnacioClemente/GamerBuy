@@ -47,27 +47,33 @@ def registrarCliente():
         mysql.connection.commit()
         flash('Registro Agregado')
         return render_template('index2.html')
-    
-@app.route('/loginCliente',methods = ['GET', 'POST'])
+
+@app.route('/loginCliente',methods = ['GET'])
 def loginCliente():
-    #if request.method == 'GET':
-     #   cursor = mysql.connection.cursor()
-       # cursor.execute('SELECT * FROM CLIENTE')
-        #respuesta = cursor.fetchall()
-    if request.method == 'POST':
-        flash('Bienvenido')
-        return render_template('index2.html')
+    if request.method == 'GET':
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT * FROM CLIENTE')
+        respuesta = cursor.fetchall()
+        return render_template('login.html',cliente = respuesta)
     
-@app.route('/miUsuario/<dni>', methods = ['GET'])
-def miUsuario(dni):
+@app.route('/obtenerCliente/<dni>')  #el id es lo que le pase entre llaves en el html
+def obtenerCliente(dni):
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT * FROM CLIENTE WHERE dni = %s' % (dni)) #el numero que tengo en id lo igualo a nro
+        respuesta = cursor.fetchall()
+        print(respuesta)
+        return render_template('eliminarEditar.html',cliente = respuesta[0])
+    
+@app.route('/editarEliminar/<dni>', methods = ['GET'])
+def editarEliminar(dni):
     if request.method == 'GET':
         cursor = mysql.connection.cursor()
         cursor.execute('SELECT * FROM CLIENTE where dni = %s' % (dni))
         respuesta = cursor.fetchall()
-        return render_template('miUsuario.html', cliente = respuesta)
+        return render_template('index2.html', cliente = respuesta)
     
 @app.route('/editarCliente/<dni>')  #el id es lo que le pase entre llaves en el html
-def obtenerCliente(dni):
+def editarCliente(dni):
     cursor = mysql.connection.cursor()
     cur= mysql.connection.cursor()
     cursor.execute('SELECT * FROM CLIENTE WHERE dni = %s' % (dni)) #el numero que tengo en id lo igualo a nro
@@ -84,12 +90,12 @@ def actualizar(dni):
         cursor = mysql.connection.cursor()
         cursor.execute("""UPDATE CLIENTE SET
         nombre = %s,
-        direccion = %s,
+        id_direccion = %s
         WHERE dni =%s""",(nombre,direccion,dni)) #traigo los valores que tengo en la base de datos y se los paso en el update
         mysql.connection.commit()
         print(dni,nombre,direccion)
         flash('Registro Actualizado')
-        return redirect(url_for('index2'))
+        return render_template('index2.html')
     
 @app.route('/eliminaCliente/<string:dni>')  #el id es lo que le pase entre llaves en el html lo convierto en string
 def eliminar(dni):
@@ -97,7 +103,7 @@ def eliminar(dni):
     cursor.execute('DELETE FROM CLIENTE WHERE dni = {0}'.format(dni)) #el numero que tengo en id lo igualo a nro
     mysql.connection.commit()#lo elimino
     flash('Registro Eliminado')
-    return redirect(url_for('index2'))
+    return render_template('index2.html')
 """
 @app.route('/registrarProducto',methods = ['POST'])
 def registrarProducto():

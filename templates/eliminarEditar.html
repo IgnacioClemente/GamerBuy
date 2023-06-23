@@ -1,0 +1,23 @@
+<table>
+    <thead>
+        <tr>
+            <td>Nombre</td>
+            <td>Direccion</td>
+        </tr>
+    </thead>
+    <tbody>
+            <td> {{cliente.1}}</td>
+            <td> {{cliente.2}}</td>
+            <td>
+                <a href="/editarCliente/{{cliente.0}}"style="text-decoration:none" >Editar</a>  <!-- la paso la clave primaria -->
+                <a href="/eliminaCliente/{{cliente.0}}"style="text-decoration:none">Eliminar</a> <!-- la paso la clave primaria -->
+            </td>
+{% with messages = get_flashed_messages()%}
+{%if messages%}
+{%for mensaje in messages%}
+<p>{{mensaje}}</p>
+{%endfor%}
+{%endif%}
+{%endwith%}
+    </tbody>
+</table>
