@@ -93,17 +93,32 @@ def actualizar(dni):
         id_direccion = %s
         WHERE dni =%s""",(nombre,direccion,dni)) #traigo los valores que tengo en la base de datos y se los paso en el update
         mysql.connection.commit()
-        print(dni,nombre,direccion)
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT 
+        productos.nombre,
+        productos.precio_por_unidad,
+        productos.stock,
+        productos.imagen,
+        marcas.nombre FROM PRODUCTOS, MARCAS WHERE id = id_marcas''')
+        respuesta = cur.fetchall()
         flash('Registro Actualizado')
-        return render_template('index2.html')
+        return render_template('index2.html',productos = respuesta)
     
-@app.route('/eliminaCliente/<string:dni>')  #el id es lo que le pase entre llaves en el html lo convierto en string
+@app.route('/eliminarCliente/<string:dni>')  #el id es lo que le pase entre llaves en el html lo convierto en string
 def eliminar(dni):
     cursor = mysql.connection.cursor()
     cursor.execute('DELETE FROM CLIENTE WHERE dni = {0}'.format(dni)) #el numero que tengo en id lo igualo a nro
     mysql.connection.commit()#lo elimino
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT 
+    productos.nombre,
+    productos.precio_por_unidad,
+    productos.stock,
+    productos.imagen,
+    marcas.nombre FROM PRODUCTOS, MARCAS WHERE id = id_marcas''')
+    respuesta = cur.fetchall()
     flash('Registro Eliminado')
-    return render_template('index2.html')
+    return render_template('index2.html',productos = respuesta)
 """
 @app.route('/registrarProducto',methods = ['POST'])
 def registrarProducto():

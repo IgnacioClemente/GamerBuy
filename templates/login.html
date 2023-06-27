@@ -1,18 +1,15 @@
-    <thead>
-        <form action="">
-            <h1>Formulario</h1>
-            <select name="DNI" id="">
-                <option value="">Seleccione DNI</option>
-                {% for c in cliente %}
-                <option value="{{c.0}}">{{c.0}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
-                y luego imprimo primero el nombre y luego el numero-->
-                    {% for c in cliente %}
-                        <button> <a href = "/obtenerCliente/{{cliente.0}}"> Enviar </a> </button>
-            {% endfor %}
-            {% endfor %}
-        </form>
+<form action="/loginCliente" method="GET"> 
+    <h1>Formulario</h1>
+    <select name="DNI" id="">
+        <option value="">Seleccione DNI</option>
+        {% for c in cliente %}
+        <option value="{{c.0}}">{{c.0}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
+        y luego imprimo primero el nombre y luego el numero-->
+        <button type="submit" formaction="/obtenerCliente/{{c.0}}">Enviar</button>
     </select><br>
-    </thead>
+        {% endfor %}
+</form>
+
 {% with messages = get_flashed_messages()%}
 {%if messages%}
 {%for mensaje in messages%}
