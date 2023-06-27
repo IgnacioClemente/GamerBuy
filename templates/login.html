@@ -1,15 +1,17 @@
-<form action="/loginCliente" method="GET"> 
-    <h1>Formulario</h1>
-    <select name="DNI" id="">
-        <option value="">Seleccione DNI</option>
+   <table>
+   <h1>Formulario</h1>
+   <tbody>
         {% for c in cliente %}
+        <tr>
+            <td>
         <option value="{{c.0}}">{{c.0}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
         y luego imprimo primero el nombre y luego el numero-->
-        <button type="submit" formaction="/obtenerCliente/{{c.0}}">Enviar</button>
-    </select><br>
+        <a href="/obtenerCliente/{{c.0}}"style="text-decoration:none" >Enviar</a>&nbsp;  <!-- la paso la clave primaria -->
+        </td>
+        </tr>
         {% endfor %}
-</form>
-
+</tbody>
+</table>
 {% with messages = get_flashed_messages()%}
 {%if messages%}
 {%for mensaje in messages%}
