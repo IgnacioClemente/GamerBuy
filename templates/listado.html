@@ -1,27 +1,28 @@
 <table>
     <thead>
         <tr>
-            <td>Numero</td>
-            <td>Fecha</td>
-            <td>Hora</td>
-            <td>Ciudad</td>
-            <td>Personal</td>
-            <td>Patente</td>
-            <td>Acciones</td>
+            <td>Codigo</td>
+            <td>Nombre</td>
+            <td>Precio</td>
+            <td>Stock</td>
+            <td>Imagen</td>
+            <td>Proveedor</td>
+            <td>Marca</td>
         </tr>
     </thead>
     <tbody>
-        {% for v in vuelos %} <!-- doble llave para que imprima una sola para que se ejecute -->
+        {% for p in productos %} <!-- doble llave para que imprima una sola para que se ejecute -->
         <tr>
-            <td>{{v.0}}</td>
-            <td>{{v.1}}</td>
-            <td>{{v.2}}</td>
-            <td>{{v.3}}</td>
-            <td>{{v.4}}</td>
-            <td>{{v.5}}</td>
+            <td>{{p.0}}</td>
+            <td>{{p.1}}</td>
+            <td>{{p.2}}</td>
+            <td>{{p.3}}</td>
+            <td>{{p.4}}</td>
+            <td>{{p.5}}</td>
+            <td>{{p.6}}</td>
             <td>
-                <a href="/editarVuelos/{{v.0}}"style="text-decoration:none" >Editar</a>  <!-- la paso la clave primaria -->
-                <a href="/eliminarVuelo/{{v.0}}"style="text-decoration:none">Eliminar</a> <!-- la paso la clave primaria -->
+                <a href="/editarProducto/{{p.0}}"style="text-decoration:none" >Editar</a>  <!-- la paso la clave primaria -->
+                <a href="/eliminarProducto/{{p.0}}"style="text-decoration:none">Eliminar</a> <!-- la paso la clave primaria -->
             </td>
         </tr>
 {% endfor %}
@@ -32,5 +33,5 @@
 {%endfor%}
 {%endif%}
 {%endwith%}
-    </tbody>
+</tbody>
 </table>

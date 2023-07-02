@@ -1,0 +1,34 @@
+<form action="/actualizarProducto/{{producto.0}}" method="POST">
+    <h1>Formulario de edicion</h1>
+    <input type="text"  name="nombre" placeholder="Nombre" value="{{producto.1}}"><br>
+    <input type="number" name="precio" placeholder="Precio" value="{{producto.2}}"><br>
+    <input type="number" name="stock" placeholder="Stock" value="{{producto.3}}"><br>
+    <input type="text" name="imagen" placeholder="Imagen" value="{{producto.4}}"><br>
+
+    <select name="proveedor" id="">
+        <option value="">Seleccione un Proveedor</option>
+        {% for p in proveedor %}
+        {%if p[0] == producto.5 %}
+        <option value="{{p.0}}">{{p.0}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
+        y luego imprimo primero el nombre y luego el numero-->
+       {% endif %}
+        {% endfor %}
+    </select><br>
+        <select name="marca" id="">
+            <option value="">Seleccione una Marca</option>
+            {% for m in marcas %}
+            {%if m[0] == producto.6%}
+            <option value="{{m.0}}">{{m.1}} {{m.2}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
+            y luego imprimo primero el nombre y luego el numero-->
+           {% endif %}
+            {% endfor %}
+    </select><br>
+        <button type="submit">Enviar</button>
+</form>
+{% with messages = get_flashed_messages()%}
+{%if messages%}
+{%for mensaje in messages%}
+<p>{{mensaje}}</p>
+{%endfor%}
+{%endif%}
+{%endwith%}
