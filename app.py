@@ -45,8 +45,16 @@ def registrarCliente():
         cursor.execute("INSERT INTO CLIENTE (dni,nombre,id_direccion)VALUES(%s, %s, %s)",
         (dni,nombre,direccion)) #el porcentaje s significa que vas a poner los valores que te paso a continuacion
         mysql.connection.commit()
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT 
+        productos.nombre,
+        productos.precio_por_unidad,
+        productos.stock,
+        productos.imagen,
+        marcas.nombre FROM PRODUCTOS, MARCAS WHERE id = id_marcas''')
+        respuesta = cur.fetchall()
         flash('Cliente Registrado')
-        return render_template('index2.html')
+        return render_template('index2.html',productos = respuesta)
 
 @app.route('/loginCliente',methods = ['GET'])
 def loginCliente():
@@ -140,9 +148,17 @@ def registrarProducto():
         cursor = mysql.connection.cursor()
         cursor.execute("INSERT INTO PRODUCTOS (codigo,nombre,precio_por_unidad,stock,imagen,id_proveedor,id_marcas)VALUES(%s, %s, %s, %s, %s, %s,%s)",
         (codigo,nombre,precio,stock,imagen,proveedor,marcas)) #el porcentaje s significa que vas a poner los valores que te paso a continuacion
+        curs = mysql.connection.cursor()
         mysql.connection.commit()
+        curs.execute('''SELECT 
+        productos.nombre,
+        productos.precio_por_unidad,
+        productos.stock,
+        productos.imagen,
+        marcas.nombre FROM PRODUCTOS, MARCAS WHERE id = id_marcas''')
+        respuesta = curs.fetchall()
         flash('Producto Registrado')
-        return render_template('index2.html')
+        return render_template('index2.html',productos = respuesta)
     
 @app.route('/editarProducto/<codigo>')  #el id es lo que le pase entre llaves en el html
 def obtenerProducto(codigo):
@@ -203,7 +219,6 @@ def eliminarProducto(codigo):
     flash('Producto Eliminado')
     return render_template('index2.html',productos = respuesta)
 """
-    
 @app.route('/registrarCarrito',methods = ['POST'])
 def registrarCarrito():
     if request.method == 'POST':
@@ -236,6 +251,22 @@ def registrarDireccion():
         flash('Registro Agregado')
         return redirect(url_for('index'))
     
+ @app.route('/registrarFormaDePago',methods = ['POST'])
+def registrarDireccion():
+    if request.method == 'POST':
+        numero = request.form['numero']
+        fecha = request.form['fecha']
+        hora = request.form['hora']
+        ciudad = request.form['ciudad']
+        personal = request.form['personal']
+        patente = request.form['patente']
+        cursor = mysql.connection.cursor()
+        cursor.execute("INSERT INTO VUELOS (nro,fecha,hora,ciudad,personal,patente)VALUES(%s, %s, %s, %s, %s, %s)",
+        (numero,fecha,hora,ciudad,personal,patente)) #el porcentaje s significa que vas a poner los valores que te paso a continuacion
+        mysql.connection.commit()
+        flash('Registro Agregado')
+        return redirect(url_for('index'))
+        
 @app.route('/editarVuelos/<id>')  #el id es lo que le pase entre llaves en el html
 def obtenerVuelo(id):
     cursor = mysql.connection.cursor()

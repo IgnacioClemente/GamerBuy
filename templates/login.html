@@ -4,9 +4,9 @@
         {% for c in cliente %}
         <tr>
             <td>
-        <option value="{{c.0}}">{{c.0}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
+        <option value="{{c.0}}">DNI: {{c.0}} NOMBRE: {{c.1}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
         y luego imprimo primero el nombre y luego el numero-->
-        <a href="/obtenerCliente/{{c.0}}"style="text-decoration:none" >Enviar</a>&nbsp;  <!-- la paso la clave primaria -->
+        <a href="/obtenerCliente/{{c.0}}"style="text-decoration:none" >Login</a>&nbsp;  <!-- la paso la clave primaria -->
         </td>
         </tr>
         {% endfor %}
