@@ -1,0 +1,29 @@
+<table>
+    <thead>
+        <tr>
+            <td>Nombre</td>
+            <td>Altura</td>
+            <td>Localidad</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for d in direccion %} <!-- doble llave para que imprima una sola para que se ejecute -->
+        <tr>
+            <td>{{d.1}}</td>
+            <td>{{d.2}}</td>
+            <td>{{d.3}}</td>
+            <td>
+                <a href="/editarDireccion/{{d.0}}"style="text-decoration:none" >Editar</a>  <!-- la paso la clave primaria -->
+                <a href="/eliminarDireccion/{{d.0}}"style="text-decoration:none">Eliminar</a> <!-- la paso la clave primaria -->
+            </td>
+        </tr>
+{% endfor %}
+{% with messages = get_flashed_messages()%}
+{%if messages%}
+{%for mensaje in messages%}
+<p>{{mensaje}}</p>
+{%endfor%}
+{%endif%}
+{%endwith%}
+</tbody>
+</table>

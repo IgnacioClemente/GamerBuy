@@ -25,11 +25,18 @@ def index():
     return render_template('index.html',productos = respuesta)
 
 @app.route('/listadoProductos')
-def listado():
+def listadoProductos():
     cursor = mysql.connection.cursor()
     cursor.execute('SELECT * FROM PRODUCTOS')
     respuesta = cursor.fetchall()
     return render_template('listadoProductos.html',productos = respuesta)
+
+@app.route('/listadoDirecciones')
+def listadoDirecciones():
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT * FROM DIRECCION')
+    respuesta = cursor.fetchall()
+    return render_template('listadoDirecciones.html',direccion = respuesta)
 
 @app.route('/registrarCliente',methods = ['GET','POST'])
 def registrarCliente():
@@ -58,13 +65,13 @@ def registrarCliente():
         flash('Cliente Registrado')
         return render_template('index.html',productos = respuesta)
 
-@app.route('/loginCliente',methods = ['GET'])
-def loginCliente():
+@app.route('/administrarUsuarios',methods = ['GET'])
+def administrarUsuarios():
     if request.method == 'GET':
         cursor = mysql.connection.cursor()
         cursor.execute('SELECT * FROM CLIENTE')
         respuesta = cursor.fetchall()
-        return render_template('login.html',cliente = respuesta)
+        return render_template('administrarUsuarios.html',cliente = respuesta)
     
 @app.route('/obtenerCliente/<dni>')  #el id es lo que le pase entre llaves en el html
 def obtenerCliente(dni):
@@ -92,7 +99,7 @@ def editarCliente(dni):
     return render_template('editarCliente.html',cliente = respuesta[0],direccion = res)
 
 @app.route('/actualizarCliente/<dni>',methods = ['POST'])#pasarle la variable como esta escrita en la base de datos
-def actualizar(dni):
+def actualizarCliente(dni):
     if request.method == 'POST':
         nombre = request.form['nombre']
         direccion = request.form['direccion']
@@ -115,7 +122,7 @@ def actualizar(dni):
         return render_template('index.html',productos = respuesta)
     
 @app.route('/eliminarCliente/<string:dni>')  #el id es lo que le pase entre llaves en el html lo convierto en string
-def eliminar(dni):
+def eliminarCliente(dni):
     cursor = mysql.connection.cursor()
     cursor.execute('DELETE FROM CLIENTE WHERE dni = {0}'.format(dni)) #el numero que tengo en id lo igualo a nro
     mysql.connection.commit()#lo elimino
@@ -250,6 +257,57 @@ def registrarDireccion():
         marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
         respuesta = cur.fetchall()
         return render_template('index.html',productos = respuesta)
+    
+@app.route('/editarDireccion/<id>')  #el id es lo que le pase entre llaves en el html
+def editarDireccion(id):
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT * FROM DIRECCION WHERE id = %s' % (id)) #el numero que tengo en id lo igualo a nro
+    respuesta = cursor.fetchall()
+    return render_template('editarDireccion.html',direccion = respuesta[0])
+
+@app.route('/actualizarDireccion/<id>',methods = ['POST'])#pasarle la variable como esta escrita en la base de datos
+def actualizarDireccion(id):
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        altura = request.form['altura']
+        localidad = request.form['localidad']
+        cursor = mysql.connection.cursor()
+        cursor.execute("""UPDATE DIRECCION SET
+        nombre = %s,
+        altura = %s,
+        localidad = %s
+        WHERE id = %s""",(nombre,altura,localidad,id)) #traigo los valores que tengo en la base de datos y se los paso en el update
+        mysql.connection.commit()
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT 
+        productos.nombre,
+        productos.precio_por_unidad,
+        productos.stock,
+        productos.imagen,
+        proveedor.nombre,
+        marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
+        respuesta = cur.fetchall()
+        flash('Producto Actualizado')
+        return render_template('index.html',productos = respuesta)
+    
+@app.route('/eliminarDireccion/<string:id>')  #el id es lo que le pase entre llaves en el html lo convierto en string
+def eliminarDireccion(id):
+    cursor = mysql.connection.cursor()
+    curs = mysql.connection.cursor()
+    cursor.execute('DELETE FROM DIRECCION WHERE id = {0}'.format(id)) 
+    curs.execute('DELETE FROM CLIENTE WHERE id_direccion = {0}'.format(id)) #el numero que tengo en id lo igualo a nro
+    mysql.connection.commit()#lo elimino
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT 
+    productos.nombre,
+    productos.precio_por_unidad,
+    productos.stock,
+    productos.imagen,
+    proveedor.nombre,
+    marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
+    respuesta = cur.fetchall()
+    flash('Dirección Eliminada')
+    return render_template('index.html',productos = respuesta)
 
 """
  @app.route('/registrarFormaDePago',methods = ['POST'])

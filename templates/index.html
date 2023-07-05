@@ -21,10 +21,11 @@
         </tr>
 {% endfor %} 
     <a href="/registrarCliente"style="text-decoration:none" >Registrarse</a>&nbsp;  <!-- la paso la clave primaria -->
+    <a href="/administrarUsuarios"style="text-decoration:none" >Administrar Usuarios</a>&nbsp;  <!-- la paso la clave primaria -->
     <a href="/registrarProducto"style="text-decoration:none" >Crear una publicación</a>&nbsp; <!-- la paso la clave primaria -->
-    <a href="/registrarDireccion"style="text-decoration:none" >Registrar una Dirección</a>&nbsp; <!-- la paso la clave primaria -->
-    <a href="/loginCliente"style="text-decoration:none" >Login</a>&nbsp;  <!-- la paso la clave primaria -->
     <a href="/listadoProductos"style="text-decoration:none" >Editar Publicación</a>&nbsp; <!-- la paso la clave primaria -->
+    <a href="/registrarDireccion"style="text-decoration:none" >Registrar una Dirección</a>&nbsp; <!-- la paso la clave primaria -->
+    <a href="/listadoDirecciones"style="text-decoration:none" >Editar una Dirección</a>&nbsp; <!-- la paso la clave primaria -->
     </tbody>
 </table>
 {% with messages = get_flashed_messages()%}
