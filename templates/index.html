@@ -1,21 +1,32 @@
-    {% extends 'encabezado.html' %}
-
-    {% block body  %}
-    
-    <form action="/registrarCliente" method="POST">
-        <h1>Formulario</h1>
-        <input type="number" name="dni" placeholder="DNI"><br>
-        <input type="text"  name="nombre" placeholder="Nombre"><br>
-        <select name="direccion" id="">
-            <option value="">Seleccione Dirección</option>
-            {% for d in direccion %}
-            <option value="{{d.0}}">{{d.2}} {{d.3}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
-            y luego imprimo primero el nombre y luego el numero-->
-            {% endfor %}
-        </select><br>
-        <button type="submit">Enviar</button>
-    </form>
-
+<table>
+    <thead>
+        <tr>
+            <td>Nombre</td>
+            <td>Precio</td>
+            <td>Stock</td>
+            <td>Imagen</td>
+            <td>Proveedor</td>
+            <td>Marca</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in productos %} <!-- doble llave para que imprima una sola para que se ejecute -->
+        <tr>
+            <td>{{p.0}}</td>
+            <td>{{p.1}}</td>
+            <td>{{p.2}}</td>
+            <td>{{p.3}}</td>
+            <td>{{p.4}}</td>
+            <td>{{p.5}}</td>
+        </tr>
+{% endfor %} 
+    <a href="/registrarCliente"style="text-decoration:none" >Registrarse</a>&nbsp;  <!-- la paso la clave primaria -->
+    <a href="/registrarProducto"style="text-decoration:none" >Crear una publicación</a>&nbsp; <!-- la paso la clave primaria -->
+    <a href="/registrarDireccion"style="text-decoration:none" >Registrar una Dirección</a>&nbsp; <!-- la paso la clave primaria -->
+    <a href="/loginCliente"style="text-decoration:none" >Login</a>&nbsp;  <!-- la paso la clave primaria -->
+    <a href="/listadoProductos"style="text-decoration:none" >Editar Publicación</a>&nbsp; <!-- la paso la clave primaria -->
+    </tbody>
+</table>
 {% with messages = get_flashed_messages()%}
 {%if messages%}
 {%for mensaje in messages%}
@@ -23,4 +34,3 @@
 {%endfor%}
 {%endif%}
 {%endwith%}
-{% endblock  %}

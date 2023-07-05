@@ -19,16 +19,17 @@ def index():
     productos.precio_por_unidad,
     productos.stock,
     productos.imagen,
-    marcas.nombre FROM PRODUCTOS, MARCAS WHERE id = id_marcas''')
+    proveedor.nombre,
+    marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
     respuesta = cursor.fetchall()
-    return render_template('index2.html',productos = respuesta)
+    return render_template('index.html',productos = respuesta)
 
-@app.route('/listado')
+@app.route('/listadoProductos')
 def listado():
     cursor = mysql.connection.cursor()
     cursor.execute('SELECT * FROM PRODUCTOS')
     respuesta = cursor.fetchall()
-    return render_template('listado.html',productos = respuesta)
+    return render_template('listadoProductos.html',productos = respuesta)
 
 @app.route('/registrarCliente',methods = ['GET','POST'])
 def registrarCliente():
@@ -36,7 +37,7 @@ def registrarCliente():
         cursor = mysql.connection.cursor()
         cursor.execute('SELECT * FROM DIRECCION')
         respuesta = cursor.fetchall()
-        return render_template('index.html', direccion = respuesta)
+        return render_template('registrarCliente.html', direccion = respuesta)
     if request.method == 'POST':
         dni = request.form['dni']
         nombre = request.form['nombre']
@@ -51,10 +52,11 @@ def registrarCliente():
         productos.precio_por_unidad,
         productos.stock,
         productos.imagen,
-        marcas.nombre FROM PRODUCTOS, MARCAS WHERE id = id_marcas''')
+        proveedor.nombre,
+        marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
         respuesta = cur.fetchall()
         flash('Cliente Registrado')
-        return render_template('index2.html',productos = respuesta)
+        return render_template('index.html',productos = respuesta)
 
 @app.route('/loginCliente',methods = ['GET'])
 def loginCliente():
@@ -77,7 +79,7 @@ def editarEliminar(dni):
         cursor = mysql.connection.cursor()
         cursor.execute('SELECT * FROM CLIENTE where dni = %s' % (dni))
         respuesta = cursor.fetchall()
-        return render_template('index2.html', cliente = respuesta)
+        return render_template('index.html', cliente = respuesta)
     
 @app.route('/editarCliente/<dni>')  #el id es lo que le pase entre llaves en el html
 def editarCliente(dni):
@@ -87,7 +89,7 @@ def editarCliente(dni):
     cur.execute('SELECT * FROM DIRECCION')
     respuesta = cursor.fetchall()
     res = cur.fetchall()
-    return render_template('editar.html',cliente = respuesta[0],direccion = res)
+    return render_template('editarCliente.html',cliente = respuesta[0],direccion = res)
 
 @app.route('/actualizarCliente/<dni>',methods = ['POST'])#pasarle la variable como esta escrita en la base de datos
 def actualizar(dni):
@@ -106,10 +108,11 @@ def actualizar(dni):
         productos.precio_por_unidad,
         productos.stock,
         productos.imagen,
-        marcas.nombre FROM PRODUCTOS, MARCAS WHERE id = id_marcas''')
+        proveedor.nombre,
+        marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
         respuesta = cur.fetchall()
         flash('Cliente Actualizado')
-        return render_template('index2.html',productos = respuesta)
+        return render_template('index.html',productos = respuesta)
     
 @app.route('/eliminarCliente/<string:dni>')  #el id es lo que le pase entre llaves en el html lo convierto en string
 def eliminar(dni):
@@ -122,10 +125,11 @@ def eliminar(dni):
     productos.precio_por_unidad,
     productos.stock,
     productos.imagen,
-    marcas.nombre FROM PRODUCTOS, MARCAS WHERE id = id_marcas''')
+    proveedor.nombre,
+    marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
     respuesta = cur.fetchall()
     flash('Cliente Eliminado')
-    return render_template('index2.html',productos = respuesta)
+    return render_template('index.html',productos = respuesta)
 
 @app.route('/registrarProducto',methods = ['GET','POST'])
 def registrarProducto():
@@ -148,17 +152,18 @@ def registrarProducto():
         cursor = mysql.connection.cursor()
         cursor.execute("INSERT INTO PRODUCTOS (codigo,nombre,precio_por_unidad,stock,imagen,id_proveedor,id_marcas)VALUES(%s, %s, %s, %s, %s, %s,%s)",
         (codigo,nombre,precio,stock,imagen,proveedor,marcas)) #el porcentaje s significa que vas a poner los valores que te paso a continuacion
-        curs = mysql.connection.cursor()
         mysql.connection.commit()
+        curs = mysql.connection.cursor()
         curs.execute('''SELECT 
         productos.nombre,
         productos.precio_por_unidad,
         productos.stock,
         productos.imagen,
-        marcas.nombre FROM PRODUCTOS, MARCAS WHERE id = id_marcas''')
+        proveedor.nombre,
+        marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
         respuesta = curs.fetchall()
         flash('Producto Registrado')
-        return render_template('index2.html',productos = respuesta)
+        return render_template('index.html',productos = respuesta)
     
 @app.route('/editarProducto/<codigo>')  #el id es lo que le pase entre llaves en el html
 def obtenerProducto(codigo):
@@ -198,10 +203,11 @@ def actualizarProducto(codigo):
         productos.precio_por_unidad,
         productos.stock,
         productos.imagen,
-        marcas.nombre FROM PRODUCTOS, MARCAS WHERE id = id_marcas''')
+        proveedor.nombre,
+        marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
         respuesta = cur.fetchall()
         flash('Producto Actualizado')
-        return render_template('index2.html',productos = respuesta)
+        return render_template('index.html',productos = respuesta)
     
 @app.route('/eliminarProducto/<string:codigo>')  #el id es lo que le pase entre llaves en el html lo convierto en string
 def eliminarProducto(codigo):
@@ -214,43 +220,38 @@ def eliminarProducto(codigo):
     productos.precio_por_unidad,
     productos.stock,
     productos.imagen,
-    marcas.nombre FROM PRODUCTOS, MARCAS WHERE id = id_marcas''')
+    proveedor.nombre,
+    marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
     respuesta = cur.fetchall()
     flash('Producto Eliminado')
-    return render_template('index2.html',productos = respuesta)
-"""
-@app.route('/registrarCarrito',methods = ['POST'])
-def registrarCarrito():
-    if request.method == 'POST':
-        numero = request.form['numero']
-        fecha = request.form['fecha']
-        hora = request.form['hora']
-        ciudad = request.form['ciudad']
-        personal = request.form['personal']
-        patente = request.form['patente']
-        cursor = mysql.connection.cursor()
-        cursor.execute("INSERT INTO VUELOS (nro,fecha,hora,ciudad,personal,patente)VALUES(%s, %s, %s, %s, %s, %s)",
-        (numero,fecha,hora,ciudad,personal,patente)) #el porcentaje s significa que vas a poner los valores que te paso a continuacion
-        mysql.connection.commit()
-        flash('Registro Agregado')
-        return redirect(url_for('index'))
-    
-@app.route('/registrarDireccion',methods = ['POST'])
+    return render_template('index.html',productos = respuesta)
+
+@app.route('/registrarDireccion',methods=['POST', 'GET'])
 def registrarDireccion():
+    if request.method == 'GET':
+        return render_template('registrarDireccion.html')
     if request.method == 'POST':
-        numero = request.form['numero']
-        fecha = request.form['fecha']
-        hora = request.form['hora']
-        ciudad = request.form['ciudad']
-        personal = request.form['personal']
-        patente = request.form['patente']
+        id = request.form['id']
+        nombre = request.form['nombre']
+        altura = request.form['altura']
+        localidad = request.form['localidad']
         cursor = mysql.connection.cursor()
-        cursor.execute("INSERT INTO VUELOS (nro,fecha,hora,ciudad,personal,patente)VALUES(%s, %s, %s, %s, %s, %s)",
-        (numero,fecha,hora,ciudad,personal,patente)) #el porcentaje s significa que vas a poner los valores que te paso a continuacion
+        cursor.execute("INSERT INTO DIRECCION (id,nombre,altura,localidad)VALUES(%s, %s, %s, %s)",
+        (id,nombre,altura,localidad)) #el porcentaje s significa que vas a poner los valores que te paso a continuacion
         mysql.connection.commit()
-        flash('Registro Agregado')
-        return redirect(url_for('index'))
-    
+        flash('Direccion Registrada')
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT 
+        productos.nombre,
+        productos.precio_por_unidad,
+        productos.stock,
+        productos.imagen,
+        proveedor.nombre,
+        marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
+        respuesta = cur.fetchall()
+        return render_template('index.html',productos = respuesta)
+
+"""
  @app.route('/registrarFormaDePago',methods = ['POST'])
 def registrarDireccion():
     if request.method == 'POST':
@@ -267,48 +268,21 @@ def registrarDireccion():
         flash('Registro Agregado')
         return redirect(url_for('index'))
         
-@app.route('/editarVuelos/<id>')  #el id es lo que le pase entre llaves en el html
-def obtenerVuelo(id):
-    cursor = mysql.connection.cursor()
-    cur= mysql.connection.cursor()
-    cu= mysql.connection.cursor()
-    cursor.execute('SELECT * FROM VUELOS WHERE nro = %s' % (id)) #el numero que tengo en id lo igualo a nro
-    cur.execute('SELECT * FROM PERSONAL')
-    cu.execute('SELECT * FROM AVION')
-    respuesta = cursor.fetchall()
-    res = cur.fetchall()
-    re = cu.fetchall()
-    return render_template('editar.html',vuelos = respuesta[0],patente = re, personal = res)
-"""
-"""
-@app.route('/actualizarVuelo/<nro>',methods = ['POST'])#pasarle la variable como esta escrita en la base de datos
-def actualizar(nro):
+@app.route('/registrarCarrito',methods = ['POST'])
+def registrarCarrito():
     if request.method == 'POST':
+        numero = request.form['numero']
         fecha = request.form['fecha']
         hora = request.form['hora']
         ciudad = request.form['ciudad']
         personal = request.form['personal']
         patente = request.form['patente']
         cursor = mysql.connection.cursor()
-        #cursor.execute("""#UPDATE VUELOS SET
-        #fecha = %s,
-        #hora = %s,
-        #ciudad = %s,
-        #personal = %s,
-        #patente = %s
-        #WHERE nro =%s""",(fecha,hora,ciudad,personal,patente,nro)) #traigo los valores que tengo en la base de datos y se los paso en el update
-       # mysql.connection.commit()
-        #print(nro,ciudad,patente)
-       # flash('Registro Actualizado')
-       # return redirect(url_for('index'))
-""" 
-@app.route('/eliminarVuelo/<string:nro>')  #el id es lo que le pase entre llaves en el html lo convierto en string
-def eliminar(nro):
-    cursor = mysql.connection.cursor()
-    cursor.execute('DELETE FROM VUELOS WHERE nro = {0}'.format(nro)) #el numero que tengo en id lo igualo a nro
-    mysql.connection.commit()#lo elimino
-    flash('Registro Eliminado')
-    return redirect(url_for('index'))
+        cursor.execute("INSERT INTO VUELOS (nro,fecha,hora,ciudad,personal,patente)VALUES(%s, %s, %s, %s, %s, %s)",
+        (numero,fecha,hora,ciudad,personal,patente)) #el porcentaje s significa que vas a poner los valores que te paso a continuacion
+        mysql.connection.commit()
+        flash('Registro Agregado')
+        return redirect(url_for('index'))
 """ 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

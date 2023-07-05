@@ -9,9 +9,13 @@
         <option value="">Seleccione un Proveedor</option>
         {% for p in proveedor %}
         {%if p[0] == producto.5 %}
-        <option value="{{p.0}}">{{p.0}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
+        <option value="{{p.0}}">{{p.1}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
         y luego imprimo primero el nombre y luego el numero-->
        {% endif %}
+        {% endfor %}
+        {% for p in proveedor %}
+        <option value="{{p.0}}">{{p.1}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
+        y luego imprimo primero el nombre y luego el numero-->
         {% endfor %}
     </select><br>
         <select name="marca" id="">
@@ -21,6 +25,10 @@
             <option value="{{m.0}}">{{m.1}} {{m.2}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
             y luego imprimo primero el nombre y luego el numero-->
            {% endif %}
+            {% endfor %}
+            {% for m in marcas %}
+            <option value="{{m.0}}">{{m.1}} {{m.2}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
+            y luego imprimo primero el nombre y luego el numero-->
             {% endfor %}
     </select><br>
         <button type="submit">Enviar</button>
