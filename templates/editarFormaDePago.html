@@ -1,0 +1,13 @@
+<form action="/actualizarFormaDePago/{{forma.0}}" method="POST">
+    <h1>Formulario de edición</h1>
+    <input type="text"  name="tipo" placeholder="Tipo" value="{{forma.1}}"><br>
+    <input type="text" name="nombre" placeholder="Nombre" value="{{forma.2}}"><br>
+    <button type="submit">Enviar</button>
+</form>
+{% with messages = get_flashed_messages()%}
+{%if messages%}
+{%for mensaje in messages%}
+<p>{{mensaje}}</p>
+{%endfor%}
+{%endif%}
+{%endwith%}

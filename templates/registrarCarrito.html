@@ -1,0 +1,42 @@
+{% extends 'encabezado.html' %}
+
+{% block body  %}
+
+<form action="/registrarCarrito" method="POST">
+    <h1>Cree un carrito</h1>
+    <input type="id" name="id" placeholder="Id"><br>
+    <input type="text"  name="fecha" placeholder="AAAA-MM-DD"><br>
+    <input type="number" name="cantidad" placeholder="Cantidad"><br>
+    <input type="number" name="precio" placeholder="Precio"><br>
+    <input type="number" name="precio_total" placeholder="Precio Total"><br>
+    <select name="forma" id="">
+        <option value="">Seleccione una Forma de pago</option>
+        {% for f in forma %}
+        <option value="{{f.1}}">{{f.0}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
+        y luego imprimo primero el nombre y luego el numero-->
+        {% endfor %}
+    </select><br>
+    <select name="dni" id="">
+        <option value="">Seleccione un DNI</option>
+        {% for c in cliente %}
+        <option value="{{c.0}}">{{c.0}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
+        y luego imprimo primero el nombre y luego el numero-->
+        {% endfor %}
+    </select><br>
+    <select name="codigo" id="">
+        <option value="">Seleccione un codigo</option>
+        {% for p in productos %}
+        <option value="{{p.0}}">{{p.0}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
+        y luego imprimo primero el nombre y luego el numero-->
+        {% endfor %}
+    </select><br>
+    <button type="submit">Enviar</button>
+</form>
+{% with messages = get_flashed_messages()%}
+{%if messages%}
+{%for mensaje in messages%}
+<p>{{mensaje}}</p>
+{%endfor%}
+{%endif%}
+{%endwith%}
+{% endblock  %}

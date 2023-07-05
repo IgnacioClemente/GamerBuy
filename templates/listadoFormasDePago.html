@@ -1,0 +1,29 @@
+<table>
+    <thead>
+        <tr>
+            <td>Numero</td>
+            <td>Tipo</td>
+            <td>Nombre</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for f in forma %} <!-- doble llave para que imprima una sola para que se ejecute -->
+        <tr>
+            <td>{{f.0}}</td>
+            <td>{{f.1}}</td>
+            <td>{{f.2}}</td>
+            <td>
+                <a href="/editarFormaDePago/{{f.0}}"style="text-decoration:none" >Editar</a>  <!-- la paso la clave primaria -->
+                <a href="/eliminarFormaDePago/{{f.0}}"style="text-decoration:none">Eliminar</a> <!-- la paso la clave primaria -->
+            </td>
+        </tr>
+{% endfor %}
+{% with messages = get_flashed_messages()%}
+{%if messages%}
+{%for mensaje in messages%}
+<p>{{mensaje}}</p>
+{%endfor%}
+{%endif%}
+{%endwith%}
+</tbody>
+</table>

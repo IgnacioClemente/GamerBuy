@@ -38,6 +38,13 @@ def listadoDirecciones():
     respuesta = cursor.fetchall()
     return render_template('listadoDirecciones.html',direccion = respuesta)
 
+@app.route('/listadoFormasDePago')
+def listadoFormasDePago():
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT * FROM FORMA_DE_PAGO')
+    respuesta = cursor.fetchall()
+    return render_template('listadoFormasDePago.html',forma = respuesta)
+
 @app.route('/registrarCliente',methods = ['GET','POST'])
 def registrarCliente():
     if request.method == 'GET':
@@ -246,7 +253,6 @@ def registrarDireccion():
         cursor.execute("INSERT INTO DIRECCION (id,nombre,altura,localidad)VALUES(%s, %s, %s, %s)",
         (id,nombre,altura,localidad)) #el porcentaje s significa que vas a poner los valores que te paso a continuacion
         mysql.connection.commit()
-        flash('Direccion Registrada')
         cur = mysql.connection.cursor()
         cur.execute('''SELECT 
         productos.nombre,
@@ -256,6 +262,7 @@ def registrarDireccion():
         proveedor.nombre,
         marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
         respuesta = cur.fetchall()
+        flash('Direccion Registrada')
         return render_template('index.html',productos = respuesta)
     
 @app.route('/editarDireccion/<id>')  #el id es lo que le pase entre llaves en el html
@@ -309,38 +316,114 @@ def eliminarDireccion(id):
     flash('Dirección Eliminada')
     return render_template('index.html',productos = respuesta)
 
-"""
- @app.route('/registrarFormaDePago',methods = ['POST'])
-def registrarDireccion():
+@app.route('/registrarFormaDePago',methods = ['POST','GET'])
+def registrarFormaDePago():
+    if request.method == 'GET':
+        return render_template('registrarFormaDePago.html')
     if request.method == 'POST':
         numero = request.form['numero']
-        fecha = request.form['fecha']
-        hora = request.form['hora']
-        ciudad = request.form['ciudad']
-        personal = request.form['personal']
-        patente = request.form['patente']
+        tipo = request.form['tipo']
+        nombre = request.form['nombre']
         cursor = mysql.connection.cursor()
-        cursor.execute("INSERT INTO VUELOS (nro,fecha,hora,ciudad,personal,patente)VALUES(%s, %s, %s, %s, %s, %s)",
-        (numero,fecha,hora,ciudad,personal,patente)) #el porcentaje s significa que vas a poner los valores que te paso a continuacion
+        cursor.execute("INSERT INTO FORMA_DE_PAGO (nro_tarjeta,tipo,nombre_tarjeta)VALUES(%s, %s, %s)",
+        (numero,tipo,nombre)) #el porcentaje s significa que vas a poner los valores que te paso a continuacion
         mysql.connection.commit()
-        flash('Registro Agregado')
-        return redirect(url_for('index'))
-        
-@app.route('/registrarCarrito',methods = ['POST'])
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT 
+        productos.nombre,
+        productos.precio_por_unidad,
+        productos.stock,
+        productos.imagen,
+        proveedor.nombre,
+        marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
+        respuesta = cur.fetchall()
+        flash('Forma de pago Agregada')
+        return render_template('index.html',productos = respuesta)
+    
+@app.route('/editarFormaDePago/<nro_tarjeta>')  #el id es lo que le pase entre llaves en el html
+def editarFormaDePago(nro_tarjeta):
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT * FROM FORMA_DE_PAGO WHERE nro_tarjeta = %s' % (nro_tarjeta)) #el numero que tengo en id lo igualo a nro
+    respuesta = cursor.fetchall()
+    return render_template('editarFormaDePago.html',forma = respuesta[0])
+
+@app.route('/actualizarFormaDePago/<nro_tarjeta>',methods = ['POST'])#pasarle la variable como esta escrita en la base de datos
+def actualizarFormaDePago(nro_tarjeta):
+    if request.method == 'POST':
+        tipo = request.form['tipo']
+        nombre = request.form['nombre']
+        cursor = mysql.connection.cursor()
+        cursor.execute("""UPDATE FORMA_DE_PAGO SET
+        tipo = %s,
+        nombre_tarjeta = %s
+        WHERE nro_tarjeta = %s""",(tipo,nombre,nro_tarjeta)) #traigo los valores que tengo en la base de datos y se los paso en el update
+        mysql.connection.commit()
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT 
+        productos.nombre,
+        productos.precio_por_unidad,
+        productos.stock,
+        productos.imagen,
+        proveedor.nombre,
+        marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
+        respuesta = cur.fetchall()
+        flash('Forma de pago Actualizado')
+        return render_template('index.html',productos = respuesta)
+    
+@app.route('/eliminarFormaDePago/<string:nro_tarjeta>')  #el id es lo que le pase entre llaves en el html lo convierto en string
+def eliminarFormaDePago(nro_tarjeta):
+    cursor = mysql.connection.cursor()
+    cursor.execute('DELETE FROM FORMA_DE_PAGO WHERE nro_tarjeta = {0}'.format(nro_tarjeta)) 
+    mysql.connection.commit()#lo elimino
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT 
+    productos.nombre,
+    productos.precio_por_unidad,
+    productos.stock,
+    productos.imagen,
+    proveedor.nombre,
+    marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
+    respuesta = cur.fetchall()
+    flash('Forma de pago Eliminada')
+    return render_template('index.html',productos = respuesta)
+
+@app.route('/registrarCarrito',methods = ['POST','GET'])
 def registrarCarrito():
-    if request.method == 'POST':
-        numero = request.form['numero']
-        fecha = request.form['fecha']
-        hora = request.form['hora']
-        ciudad = request.form['ciudad']
-        personal = request.form['personal']
-        patente = request.form['patente']
+    if request.method == 'GET':
         cursor = mysql.connection.cursor()
-        cursor.execute("INSERT INTO VUELOS (nro,fecha,hora,ciudad,personal,patente)VALUES(%s, %s, %s, %s, %s, %s)",
-        (numero,fecha,hora,ciudad,personal,patente)) #el porcentaje s significa que vas a poner los valores que te paso a continuacion
+        cur = mysql.connection.cursor()
+        cu = mysql.connection.cursor()
+        cursor.execute('SELECT * FROM FORMA_DE_PAGO')
+        cur.execute('SELECT * FROM CLIENTE')
+        cu.execute('SELECT * FROM PRODUCTOS')
+        respuesta = cursor.fetchall()
+        resp = cur.fetchall()
+        res = cu.fetchall()
+        return render_template('registrarCarrito.html', forma = respuesta,cliente = resp, productos = res )
+    if request.method == 'POST':
+        id = request.form['id']
+        fecha = request.form['fecha']
+        cantidad = request.form['cantidad']
+        precio = request.form['precio']
+        precio_total = request.form['precio_total']
+        forma = request.form['forma']
+        dni = request.form['dni']
+        codigo = request.form['codigo']
+        cursor = mysql.connection.cursor()
+        cursor.execute("INSERT INTO CARRITO (id,fecha,cantidad,precio,precio_total,nro_forma_de_pago,dni_cliente,codigo_producto)VALUES(%s, %s, %s, %s, %s, %s,%s,%s)",
+        (id,fecha,cantidad,precio,precio_total,forma,dni,codigo)) #el porcentaje s significa que vas a poner los valores que te paso a continuacion
         mysql.connection.commit()
-        flash('Registro Agregado')
-        return redirect(url_for('index'))
-""" 
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT 
+        productos.nombre,
+        productos.precio_por_unidad,
+        productos.stock,
+        productos.imagen,
+        proveedor.nombre,
+        marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
+        respuesta = cur.fetchall()
+        flash('Carrito Agregado')
+        return render_template('index.html',productos = respuesta)
+    
 if __name__ == '__main__':
     app.run(port=3000, debug=True)
