@@ -12,7 +12,7 @@
     <select name="forma" id="">
         <option value="">Seleccione una Forma de pago</option>
         {% for f in forma %}
-        <option value="{{f.1}}">{{f.0}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
+        <option value="{{f.0}}">{{f.1}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
         y luego imprimo primero el nombre y luego el numero-->
         {% endfor %}
     </select><br>
@@ -32,6 +32,7 @@
     </select><br>
     <button type="submit">Enviar</button>
 </form>
+<a href="/listadoCarrito"style="text-decoration:none" ><button>Editar Carritos</button></a><!-- la paso la clave primaria -->
 {% with messages = get_flashed_messages()%}
 {%if messages%}
 {%for mensaje in messages%}

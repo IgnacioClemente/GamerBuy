@@ -24,6 +24,13 @@ def index():
     respuesta = cursor.fetchall()
     return render_template('index.html',productos = respuesta)
 
+@app.route('/listadoClientes')
+def listadoClientes():
+    cursor = mysql.connection.cursor()
+    cursor.execute('''SELECT cliente.dni, cliente.nombre, direccion.nombre FROM CLIENTE, DIRECCION WHERE cliente.id_direccion = direccion.id''')
+    respuesta = cursor.fetchall()
+    return render_template('listadoClientes.html',cliente = respuesta)
+
 @app.route('/listadoProductos')
 def listadoProductos():
     cursor = mysql.connection.cursor()
@@ -44,6 +51,15 @@ def listadoFormasDePago():
     cursor.execute('SELECT * FROM FORMA_DE_PAGO')
     respuesta = cursor.fetchall()
     return render_template('listadoFormasDePago.html',forma = respuesta)
+
+@app.route('/listadoCarrito')
+def listadoCarrito():
+    cursor = mysql.connection.cursor()
+    cursor.execute('''SELECT 
+                   carrito.id, carrito.fecha, carrito.cantidad, carrito.precio, carrito.precio_total,
+                   forma_de_pago.tipo, carrito.dni_cliente, carrito.codigo_producto FROM CARRITO, FORMA_DE_PAGO WHERE carrito.nro_forma_de_pago = forma_de_pago.nro_tarjeta''')
+    respuesta = cursor.fetchall()
+    return render_template('listadoCarrito.html',carrito = respuesta)
 
 @app.route('/registrarCliente',methods = ['GET','POST'])
 def registrarCliente():
@@ -71,29 +87,6 @@ def registrarCliente():
         respuesta = cur.fetchall()
         flash('Cliente Registrado')
         return render_template('index.html',productos = respuesta)
-
-@app.route('/administrarUsuarios',methods = ['GET'])
-def administrarUsuarios():
-    if request.method == 'GET':
-        cursor = mysql.connection.cursor()
-        cursor.execute('SELECT * FROM CLIENTE')
-        respuesta = cursor.fetchall()
-        return render_template('administrarUsuarios.html',cliente = respuesta)
-    
-@app.route('/obtenerCliente/<dni>')  #el id es lo que le pase entre llaves en el html
-def obtenerCliente(dni):
-        cursor = mysql.connection.cursor()
-        cursor.execute('SELECT * FROM CLIENTE WHERE dni = %s' % (dni)) #el numero que tengo en id lo igualo a nro
-        respuesta = cursor.fetchall()
-        return render_template('eliminarEditar.html',cliente = respuesta[0])
-    
-@app.route('/editarEliminar/<dni>', methods = ['GET'])
-def editarEliminar(dni):
-    if request.method == 'GET':
-        cursor = mysql.connection.cursor()
-        cursor.execute('SELECT * FROM CLIENTE where dni = %s' % (dni))
-        respuesta = cursor.fetchall()
-        return render_template('index.html', cliente = respuesta)
     
 @app.route('/editarCliente/<dni>')  #el id es lo que le pase entre llaves en el html
 def editarCliente(dni):
@@ -180,7 +173,7 @@ def registrarProducto():
         return render_template('index.html',productos = respuesta)
     
 @app.route('/editarProducto/<codigo>')  #el id es lo que le pase entre llaves en el html
-def obtenerProducto(codigo):
+def editarProducto(codigo):
     cursor = mysql.connection.cursor()
     cur= mysql.connection.cursor()
     cu= mysql.connection.cursor()
@@ -294,7 +287,7 @@ def actualizarDireccion(id):
         proveedor.nombre,
         marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
         respuesta = cur.fetchall()
-        flash('Producto Actualizado')
+        flash('Dirección Actualizada')
         return render_template('index.html',productos = respuesta)
     
 @app.route('/eliminarDireccion/<string:id>')  #el id es lo que le pase entre llaves en el html lo convierto en string
@@ -319,10 +312,13 @@ def eliminarDireccion(id):
 @app.route('/registrarFormaDePago',methods = ['POST','GET'])
 def registrarFormaDePago():
     if request.method == 'GET':
-        return render_template('registrarFormaDePago.html')
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT * FROM FORMA_DE_PAGO')
+        respuesta = cursor.fetchall()
+        return render_template('registrarFormaDePago.html',forma = respuesta)
     if request.method == 'POST':
         numero = request.form['numero']
-        tipo = request.form['tipo']
+        tipo = request.form['tarjeta']
         nombre = request.form['nombre']
         cursor = mysql.connection.cursor()
         cursor.execute("INSERT INTO FORMA_DE_PAGO (nro_tarjeta,tipo,nombre_tarjeta)VALUES(%s, %s, %s)",
@@ -425,5 +421,71 @@ def registrarCarrito():
         flash('Carrito Agregado')
         return render_template('index.html',productos = respuesta)
     
+@app.route('/editarCarrito/<id>')  #el id es lo que le pase entre llaves en el html
+def editarCarrito(id):
+    cursor = mysql.connection.cursor()
+    curs= mysql.connection.cursor()
+    cur= mysql.connection.cursor()
+    cu= mysql.connection.cursor()
+    cursor.execute('SELECT * FROM CARRITO WHERE id = %s' % (id)) #el numero que tengo en id lo igualo a nro
+    curs.execute('SELECT * FROM FORMA_DE_PAGO')
+    cur.execute('SELECT * FROM CLIENTE')
+    cu.execute('SELECT * FROM PRODUCTOS')
+    respuesta = cursor.fetchall()
+    res = curs.fetchall()
+    re = cur.fetchall()
+    r = cu.fetchall()
+    return render_template('editarCarrito.html',carrito = respuesta[0],forma = res, cliente = re,producto = r)
+
+@app.route('/actualizarCarrito/<id>',methods = ['POST'])#pasarle la variable como esta escrita en la base de datos
+def actualizarCarrito(id):
+    if request.method == 'POST':
+        fecha = request.form['fecha']
+        cantidad = request.form['cantidad']
+        precio = request.form['precio']
+        precio_total = request.form['precio_total']
+        forma = request.form['forma']
+        dni = request.form['dni']
+        codigo = request.form['codigo']
+        cursor = mysql.connection.cursor()
+        cursor.execute("""UPDATE CARRITO SET
+        fecha = %s,
+        cantidad = %s,
+        precio = %s,
+        precio_total = %s,
+        nro_forma_de_pago = %s,
+        dni_cliente = %s,
+        codigo_producto = %s
+        WHERE id = %s""",(fecha,cantidad,precio,precio_total,forma,dni,codigo,id)) #traigo los valores que tengo en la base de datos y se los paso en el update
+        mysql.connection.commit()
+        cur = mysql.connection.cursor()
+        cur.execute('''SELECT 
+        productos.nombre,
+        productos.precio_por_unidad,
+        productos.stock,
+        productos.imagen,
+        proveedor.nombre,
+        marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
+        respuesta = cur.fetchall()
+        flash('Carrito Actualizado')
+        return render_template('index.html',productos = respuesta)
+    
+@app.route('/eliminarCarrito/<string:id>')  #el id es lo que le pase entre llaves en el html lo convierto en string
+def eliminarCarrito(id):
+    cursor = mysql.connection.cursor()
+    cursor.execute('DELETE FROM CARRITO WHERE id = {0}'.format(id)) 
+    mysql.connection.commit()#lo elimino
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT 
+    productos.nombre,
+    productos.precio_por_unidad,
+    productos.stock,
+    productos.imagen,
+    proveedor.nombre,
+    marcas.nombre FROM PRODUCTOS, MARCAS, PROVEEDOR WHERE marcas.id = id_marcas AND proveedor.id = id_proveedor''')
+    respuesta = cur.fetchall()
+    flash('Carrito Eliminado')
+    return render_template('index.html',productos = respuesta)
+
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

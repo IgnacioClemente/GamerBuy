@@ -20,16 +20,11 @@
             <td>{{p.5}}</td>
         </tr>
 {% endfor %} 
-    <a href="/registrarCliente"style="text-decoration:none" >Registrarse</a>&nbsp;  <!-- la paso la clave primaria -->
-    <a href="/administrarUsuarios"style="text-decoration:none" >Administrar Usuarios</a>&nbsp;  <!-- la paso la clave primaria -->
-    <a href="/registrarProducto"style="text-decoration:none" >Crear una publicación</a>&nbsp; <!-- la paso la clave primaria -->
-    <a href="/listadoProductos"style="text-decoration:none" >Editar Publicación</a>&nbsp; <!-- la paso la clave primaria -->
-    <a href="/registrarDireccion"style="text-decoration:none" >Registrar una Dirección</a>&nbsp; <!-- la paso la clave primaria -->
-    <a href="/listadoDirecciones"style="text-decoration:none" >Editar una Dirección</a>&nbsp; <!-- la paso la clave primaria -->
-    <a href="/registrarFormaDePago"style="text-decoration:none" >Registrar una forma de pago</a>&nbsp; <!-- la paso la clave primaria -->
-    <a href="/listadoFormasDePago"style="text-decoration:none" >Editar forma de pago</a>&nbsp; <!-- la paso la clave primaria -->
-    <a href="/registrarCarrito"style="text-decoration:none" >Registrar Carrito</a>&nbsp; <!-- la paso la clave primaria -->
-    
+    <a href="/registrarCliente"style="text-decoration:none" > <button>Registrarse</button> </a>&nbsp;  <!-- la paso la clave primaria -->
+    <a href="/registrarProducto"style="text-decoration:none" > <button>Crear una publicación</button> </a>&nbsp; <!-- la paso la clave primaria -->
+    <a href="/registrarDireccion"style="text-decoration:none" ><button>Registrar una Dirección</button></a>&nbsp; <!-- la paso la clave primaria -->
+    <a href="/registrarFormaDePago"style="text-decoration:none" ><button>Registrar una forma de pago</button></a>&nbsp; <!-- la paso la clave primaria -->
+    <a href="/registrarCarrito"style="text-decoration:none" ><button>Registrar Carrito</button></a>&nbsp; <!-- la paso la clave primaria -->
     </tbody>
 </table>
 {% with messages = get_flashed_messages()%}

@@ -1,0 +1,29 @@
+<table>
+    <thead>
+        <tr>
+            <td>DNI</td>
+            <td>Nombre</td>
+            <td>Dirección</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in cliente %} <!-- doble llave para que imprima una sola para que se ejecute -->
+        <tr>
+            <td>{{c.0}}</td>
+            <td>{{c.1}}</td>
+            <td>{{c.2}}</td>
+            <td>
+                <a href="/editarCliente/{{c.0}}"style="text-decoration:none" >Editar</a>  <!-- la paso la clave primaria -->
+                <a href="/eliminarCliente/{{c.0}}"style="text-decoration:none">Eliminar</a> <!-- la paso la clave primaria -->
+            </td>
+        </tr>
+{% endfor %}
+{% with messages = get_flashed_messages()%}
+{%if messages%}
+{%for mensaje in messages%}
+<p>{{mensaje}}</p>
+{%endfor%}
+{%endif%}
+{%endwith%}
+</tbody>
+</table>

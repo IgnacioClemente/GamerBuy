@@ -11,10 +11,3 @@ insert into marcas(id,nombre) values(532,'AMD');
 insert into productos(codigo,nombre,precio_por_unidad,stock,imagen,id_proveedor,id_marcas) values(35232,'Procesador',424524,4,null,24242,532);
 
 insert into carrito(id,fecha,cantidad,precio,precio_total,nro_forma_de_pago,dni_cliente,codigo_producto) values(2424,'2012-04-16',1,424524,424524,342432432,535326,35232);
-
-SELECT 
-    productos.nombre,
-    productos.precio_por_unidad,
-    productos.stock,
-    productos.imagen,
-    marcas.nombre FROM PRODUCTOS, MARCAS WHERE id = id_marcas;

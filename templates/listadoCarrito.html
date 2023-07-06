@@ -1,0 +1,37 @@
+<table>
+    <thead>
+        <tr>
+            <td>Fecha</td>
+            <td>Cantidad</td>
+            <td>Precio</td>
+            <td>Precio Total</td>
+            <td>Forma de Pago</td>
+            <td>Dni</td>
+            <td>Codigo</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in carrito %} <!-- doble llave para que imprima una sola para que se ejecute -->
+        <tr>
+            <td>{{c.1}}</td>
+            <td>{{c.2}}</td>
+            <td>{{c.3}}</td>
+            <td>{{c.4}}</td>
+            <td>{{c.5}}</td>
+            <td>{{c.6}}</td>
+            <td>{{c.7}}</td>
+            <td>
+                <a href="/editarCarrito/{{c.0}}"style="text-decoration:none" >Editar</a>  <!-- la paso la clave primaria -->
+                <a href="/eliminarCarrito/{{c.0}}"style="text-decoration:none">Eliminar</a> <!-- la paso la clave primaria -->
+            </td>
+        </tr>
+{% endfor %}
+{% with messages = get_flashed_messages()%}
+{%if messages%}
+{%for mensaje in messages%}
+<p>{{mensaje}}</p>
+{%endfor%}
+{%endif%}
+{%endwith%}
+</tbody>
+</table>

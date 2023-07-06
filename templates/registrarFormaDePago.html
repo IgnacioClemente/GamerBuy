@@ -1,10 +1,23 @@
 <form action="/registrarFormaDePago" method="POST">
-    <h1>Registre una dirección</h1>
+    <h1>Registre una Forma de pago</h1>
     <input type="number" name="numero" placeholder="Numero"><br>
-    <input type="text"  name="tipo" placeholder="Tipo"><br>
-    <input type="text" name="nombre" placeholder="Nombre"><br>
+    <select name="tarjeta" id="">
+        <option value="">Seleccione tipo de targeta</option>
+        {% for f in forma %}
+        <option value="{{f.0}}">{{f.1}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
+        y luego imprimo primero el nombre y luego el numero-->
+        {% endfor %}
+    </select><br>
+    <select name="nombre" id="">
+        <option value="">Seleccione un nombre</option>
+        {% for f in forma %}
+        <option value="{{f.0}}">{{f.2}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
+        y luego imprimo primero el nombre y luego el numero-->
+        {% endfor %}
+    </select><br>
     <button type="submit">Enviar</button>
 </form>
+<a href="/listadoFormasDePago"style="text-decoration:none" ><button>Editar formas de pago</button></a> <!-- la paso la clave primaria -->
 {% with messages = get_flashed_messages()%}
 {%if messages%}
 {%for mensaje in messages%}
