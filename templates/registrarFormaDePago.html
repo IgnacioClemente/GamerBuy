@@ -11,7 +11,7 @@
     <select name="nombre" id="">
         <option value="">Seleccione un nombre</option>
         {% for f in forma %}
-        <option value="{{f.0}}">{{f.2}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
+        <option value="{{f.2}}">{{f.2}}</option> <!-- agrego el valor de la posicion 0 y lo pego en base de datos 
         y luego imprimo primero el nombre y luego el numero-->
         {% endfor %}
     </select><br>
