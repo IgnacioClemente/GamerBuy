@@ -1,3 +1,6 @@
+{% extends 'encabezado.html' %}
+
+{% block body  %}
 <form action="/actualizarProducto/{{producto.0}}" method="POST">
     <h1>Formulario de edición</h1>
     <input type="text"  name="nombre" placeholder="Nombre" value="{{producto.1}}"><br>
@@ -38,3 +41,4 @@
 {%endfor%}
 {%endif%}
 {%endwith%}
+{% endblock  %}

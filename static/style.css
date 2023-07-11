@@ -4,3 +4,48 @@ header {
 body {
     background-color: #e7e7e7;
 }
+
+.registrarCliente{
+    display: flex;
+    padding: 0px;
+    height: 10%;
+    width: 20px;
+    margin-left: 0px;
+    margin-top: -3px;
+}
+
+.registrarProducto{
+    text-decoration: none;
+    display: flex;
+    margin-top: -40px;
+    margin-left: 90px;
+}
+
+.registrarDireccion{
+    text-decoration: none;
+    display: flex;
+    margin-top: -40px;
+    margin-left: 240px;
+}
+
+.registrarFormaDePago{
+    text-decoration: none;
+    display: flex;
+    margin-top: -40px;
+    margin-left: 398px;
+}
+
+.registrarCarrito{
+    text-decoration: none;
+    display: flex;
+    margin-top: -40px;
+    margin-left: 588px;
+}
+
+.logo{
+    display: flex;
+    padding: 0px;
+    width: 184px;
+    margin-left: -67px;
+    margin-top: -53px;
+}

@@ -1,3 +1,6 @@
+{% extends 'encabezado.html' %}
+
+{% block body  %}
    <table>
    <h1>Administrar Usuarios</h1>
    <tbody>
@@ -10,8 +13,6 @@
         </td>
         </tr>
         {% endfor %}
-</tbody>
-</table>
 {% with messages = get_flashed_messages()%}
 {%if messages%}
 {%for mensaje in messages%}
@@ -19,3 +20,6 @@
 {%endfor%}
 {%endif%}
 {%endwith%}
+{% endblock  %}
+</tbody>
+</table>

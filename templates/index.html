@@ -2,6 +2,8 @@
 
 {% block body  %}
 <header>
+    <img class="logo" src="{{ url_for('static', filename='Logo.png') }}" alt="Logo"/></img>
+</header>
 <table>
     <thead>
         <tr>
@@ -13,7 +15,6 @@
             <td>Marca</td>
         </tr>
     </thead>
-</header>
     <tbody>
         {% for p in productos %} <!-- doble llave para que imprima una sola para que se ejecute -->
         <tr>
@@ -25,11 +26,11 @@
             <td>{{p.5}}</td>
         </tr>
 {% endfor %} 
-    <a href="/registrarCliente"style="text-decoration:none" > <button>Registrarse</button> </a>&nbsp;  <!-- la paso la clave primaria -->
-    <a href="/registrarProducto"style="text-decoration:none" > <button>Crear una publicación</button> </a>&nbsp; <!-- la paso la clave primaria -->
-    <a href="/registrarDireccion"style="text-decoration:none" ><button>Registrar una Dirección</button></a>&nbsp; <!-- la paso la clave primaria -->
-    <a href="/registrarFormaDePago"style="text-decoration:none" ><button>Registrar una forma de pago</button></a>&nbsp; <!-- la paso la clave primaria -->
-    <a href="/registrarCarrito"style="text-decoration:none" ><button>Registrar Carrito</button></a>&nbsp; <!-- la paso la clave primaria -->
+    <a class="registrarCliente"href="/registrarCliente"style="text-decoration:none" > <button>Registrarse</button></a>&nbsp;  <!-- la paso la clave primaria -->
+    <a class="registrarProducto"href="/registrarProducto"style="text-decoration:none" > <button>Crear una publicación</button> </a>&nbsp; <!-- la paso la clave primaria -->
+    <a class="registrarDireccion"href="/registrarDireccion"style="text-decoration:none" ><button>Registrar una Dirección</button></a>&nbsp; <!-- la paso la clave primaria -->
+    <a class="registrarFormaDePago"href="/registrarFormaDePago"style="text-decoration:none" ><button>Registrar una forma de pago</button></a>&nbsp; <!-- la paso la clave primaria -->
+    <a class="registrarCarrito"href="/registrarCarrito"style="text-decoration:none" ><button>Registrar Carrito</button></a>&nbsp; <!-- la paso la clave primaria -->
 {% with messages = get_flashed_messages()%}
 {%if messages%}
 {%for mensaje in messages%}
